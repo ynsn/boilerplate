@@ -56,7 +56,7 @@ class Application {
   virtual void onInit() {}
   virtual void onUpdate(double delta) {}
   virtual void onViewportResize(int width, int height) {}
-  virtual void onKeyInput() {}
+  virtual void onKeyInput(int key, int scancode, int action, int mods) {}
   virtual void onMouseInput() {}
   virtual void onMouseMove() {}
 
@@ -64,6 +64,11 @@ class Application {
   inline static void OnViewportResizeCallback(GLFWwindow *window, int width, int height) {
     auto *application = (Application *) glfwGetWindowUserPointer(window);
     application->onViewportResize(width, height);
+  }
+
+  inline static void OnKeyInputCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+    auto *application = (Application *) glfwGetWindowUserPointer(window);
+    application->onKeyInput(key, scancode, action, mods);
   }
 };
 
