@@ -34,6 +34,9 @@ Application::Application(int glMajor, int glMinor, const std::string &title, int
   glfwWindowHint(GLFW_VERSION_MINOR, glMinor);
   this->handle = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
 
+  glfwSetWindowUserPointer(this->handle, this);
+  glfwSetFramebufferSizeCallback(this->handle, OnViewportResizeCallback);
+
   glfwMakeContextCurrent(this->handle);
   gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
   glfwSwapInterval(1);

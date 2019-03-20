@@ -51,6 +51,12 @@ class Application {
   virtual void onKeyInput() {}
   virtual void onMouseInput() {}
   virtual void onMouseMove() {}
+
+ private:
+  inline static void OnViewportResizeCallback(GLFWwindow *window, int width, int height) {
+    auto *application = (Application *)glfwGetWindowUserPointer(window);
+    application->onViewportResize(width, height);
+  }
 };
 
 }

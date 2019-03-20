@@ -88,6 +88,11 @@ class Triangle : public rendor::Application {
     glLinkProgram(this->shader);
   }
 
+  void onViewportResize(int width, int height) override {
+    Application::onViewportResize(width, height);
+    glViewport(0, 0, width, height);
+  }
+
   void onUpdate(double delta) override {
     Application::onUpdate(delta);
     glClear(GL_COLOR_BUFFER_BIT);
