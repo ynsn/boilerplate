@@ -44,6 +44,14 @@ class Application {
 
   void run();
 
+  void setTitle(const std::string &title);
+  const std::string &getTitle();
+
+  void setSize(int width, int height);
+  void setAspectRatio(int nomer, int denom);
+  int getWidth();
+  int getHeight();
+
  protected:
   virtual void onInit() {}
   virtual void onUpdate(double delta) {}
@@ -54,7 +62,7 @@ class Application {
 
  private:
   inline static void OnViewportResizeCallback(GLFWwindow *window, int width, int height) {
-    auto *application = (Application *)glfwGetWindowUserPointer(window);
+    auto *application = (Application *) glfwGetWindowUserPointer(window);
     application->onViewportResize(width, height);
   }
 };

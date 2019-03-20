@@ -28,11 +28,12 @@
 
 namespace rendor {
 
-Application::Application(int glMajor, int glMinor, const std::string &title, int width, int height) {
+Application::Application(int glMajor, int glMinor, const std::string &title, int width, int height)
+    : title(title), width(width), height(height) {
   glfwInit();
   glfwWindowHint(GLFW_VERSION_MAJOR, glMajor);
   glfwWindowHint(GLFW_VERSION_MINOR, glMinor);
-  this->handle = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
+  this->handle = glfwCreateWindow(this->width, this->height, this->title.c_str(), nullptr, nullptr);
 
   glfwSetWindowUserPointer(this->handle, this);
   glfwSetFramebufferSizeCallback(this->handle, OnViewportResizeCallback);
@@ -54,6 +55,33 @@ void Application::run() {
     glfwSwapBuffers(this->handle);
     glfwPollEvents();
   }
+}
+
+void Application::setTitle(const std::string &title) {
+  this->title = title;
+  glfwSetWindowTitle(this->handle, this->title.c_str());
+}
+
+const std::string &Application::getTitle() {
+  return this->title;
+}
+
+void Application::setSize(int width, int height) {
+  this->width = width;
+  this->height = height;
+  glfwSetWindowSize(this->handle, this->width, this->height);
+}
+
+void Application::setAspectRatio(int nomer, int denom) {
+  glfwSetWindowAspectRatio(this->handle, nomer, denom);
+}
+
+int Application::getWidth() {
+  return this->width;
+}
+
+int Application::getHeight() {
+  return this->height;
 }
 
 }
