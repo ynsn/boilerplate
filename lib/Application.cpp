@@ -37,6 +37,7 @@ Application::Application(int glMajor, int glMinor, const std::string &title, int
 
   glfwSetWindowUserPointer(this->handle, this);
   glfwSetFramebufferSizeCallback(this->handle, OnViewportResizeCallback);
+  glfwSetKeyCallback(this->handle, OnKeyInputCallback);
 
   glfwMakeContextCurrent(this->handle);
   gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
