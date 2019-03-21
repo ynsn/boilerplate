@@ -4,8 +4,8 @@ project(Rendor)
 add_subdirectory(deps/glad)
 add_subdirectory(deps/glfw)
 
-set(RENDOR_HEADERS include/rendor/Application.h)
-set(RENDOR_SOURCES lib/Application.cpp)
+set(RENDOR_HEADERS include/rendor/Application.h include/rendor/common/Shader.h)
+set(RENDOR_SOURCES lib/Application.cpp lib/common/Shader.cpp)
 
 set(CMAKE_CXX_STANDARD 14)
 
