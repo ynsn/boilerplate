@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-#include <rendor/Application.h>
-
 #include "rendor/Application.h"
 
 namespace rendor {
