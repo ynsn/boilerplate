@@ -32,7 +32,7 @@
 namespace rendor {
 
 class Application {
- public:
+public:
   enum class KeyInputType {
     Press,
     Repeat,
@@ -46,13 +46,13 @@ class Application {
     Super = 0x08
   };
 
- private:
+private:
   GLFWwindow *handle;
   std::string title;
   int width;
   int height;
 
- public:
+public:
   Application(int glMajor, int glMinor, const std::string &title, int width, int height);
   ~Application();
 
@@ -66,7 +66,7 @@ class Application {
   int getWidth();
   int getHeight();
 
- protected:
+protected:
   virtual void onInit() {}
   virtual void onUpdate(double delta) {}
   virtual void onViewportResize(int width, int height) {}
@@ -74,7 +74,7 @@ class Application {
   virtual void onMouseInput() {}
   virtual void onMouseMove() {}
 
- private:
+private:
   inline static void OnViewportResizeCallback(GLFWwindow *window, int width, int height) {
     auto *application = (Application *) glfwGetWindowUserPointer(window);
     application->onViewportResize(width, height);
@@ -88,16 +88,18 @@ class Application {
 
     // Convert input action types
     switch (action) {
-      case GLFW_PRESS:
-        inputAction = KeyInputType::Press;
-        break;
-      case GLFW_REPEAT:
-        inputAction = KeyInputType::Repeat;
-      case GLFW_RELEASE:
-        inputAction = KeyInputType::Release;
-      default:
-        inputAction = KeyInputType::Repeat;
-        break;
+    case GLFW_PRESS:
+      inputAction = KeyInputType::Press;
+      break;
+    case GLFW_REPEAT:
+      inputAction = KeyInputType::Repeat;
+      break;
+    case GLFW_RELEASE:
+      inputAction = KeyInputType::Release;
+      break;
+    default:
+      inputAction = KeyInputType::Repeat;
+      break;
     }
 
     application->onKeyInput(key, scancode, inputAction, mods);
