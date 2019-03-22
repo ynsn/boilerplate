@@ -108,7 +108,7 @@ const unsigned int Shader::getHandle() const {
 
 Shader *Shader::LoadFromSourceFile(const ShaderType &type1, const std::string &path) {
   std::ifstream file;
-  file.open(path, 'R');
+  file.open(path);
 
   if (!file.is_open()) {
     fprintf(stderr, "Error: could not read file '%s'\n", path.c_str());
