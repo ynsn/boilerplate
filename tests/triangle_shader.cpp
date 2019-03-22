@@ -24,17 +24,19 @@
 
 #include <rendor/Application.h>
 #include <rendor/common/Shader.h>
-#include <vector>
+#include <rendor/common/Program.h>
 #include <iostream>
 
 class Triangle : public rendor::Application {
 private:
   unsigned int vao;
   unsigned int vbo;
-  unsigned int shader;
+  rendor::Shader *vert;
+  rendor::Shader *frag;
+  rendor::ShaderProgram *shader;
 
 public:
-  Triangle() : rendor::Application(4, 5, "Triangle", 1280, 720) {}
+  Triangle() : rendor::Application(4, 5, "Triangle", 1280, 960) {}
 
 protected:
   void onInit() override {
@@ -70,33 +72,34 @@ protected:
     const char *fragmentshader = "#version 450\n"
                                  "\n"
                                  "out vec4 col;\n"
+                                 "uniform vec4 color;"
                                  "\n"
                                  "void main() {\n"
-                                 "    col = vec4(1.0, 0.7, 0.2, 1.0);\n"
+                                 "    col = color;\n"
                                  "}\n";
 
-    rendor::Shader vert(rendor::ShaderType::VertexShader);
-    rendor::Shader frag(rendor::ShaderType::FragmentShader);
+    this->vert = new rendor::Shader(rendor::ShaderType::VertexShader);
+    this->frag = new rendor::Shader(rendor::ShaderType::FragmentShader);
 
-    vert.setShaderSource(vertexShader);
-    frag.setShaderSource(fragmentshader);
+    vert->setShaderSource(vertexShader);
+    frag->setShaderSource(fragmentshader);
 
     std::cout << "====== COMPILATION STATUS ======\n";
-    std::cout << "Vertex shader compilation status: " << vert.compileShader() << "\n";
-    std::cout << "Fragment shader compilation status: " << frag.compileShader() << "\n";
+    std::cout << "Vertex shader compilation status: " << vert->compileShader() << "\n";
+    std::cout << "Fragment shader compilation status: " << frag->compileShader() << "\n";
 
     std::cout << "\n====== SOURCE LENGTHS ======\n";
-    std::cout << "Vertex shader source length: " << vert.getShaderSourceLength() << "\n";
-    std::cout << "Fragment shader source length: " << frag.getShaderSourceLength() << "\n";
+    std::cout << "Vertex shader source length: " << vert->getShaderSourceLength() << "\n";
+    std::cout << "Fragment shader source length: " << frag->getShaderSourceLength() << "\n";
 
     std::cout << "\n====== SOURCE CODE ======\n";
-    std::cout << "Vertex shader source: " << vert.getShaderSource() << "\n";
-    std::cout << "Fragment shader source: " << frag.getShaderSource() << "\n";
+    std::cout << "Vertex shader source: " << vert->getShaderSource() << "\n";
+    std::cout << "Fragment shader source: " << frag->getShaderSource() << "\n";
 
-    this->shader = glCreateProgram();
-    glAttachShader(this->shader, vert.getHandle());
-    glAttachShader(this->shader, frag.getHandle());
-    glLinkProgram(this->shader);
+    this->shader = new rendor::ShaderProgram();
+    this->shader->attachShader(vert);
+    this->shader->attachShader(frag);
+    this->shader->linkProgram();
   }
 
   void onViewportResize(int width, int height) override {
@@ -109,7 +112,8 @@ protected:
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(1.0, 0.2, 0.3, 1.0);
 
-    glUseProgram(this->shader);
+    glUseProgram(this->shader->getHandle());
+    this->shader->setUniform4f("color", glm::vec4(1.0, 0.7, 0.2, 1.0));
     glDrawArrays(GL_TRIANGLES, 0, 3);
   }
 };
