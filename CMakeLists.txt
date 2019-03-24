@@ -16,6 +16,6 @@ set(CMAKE_CXX_STANDARD 14)
 
 add_library(rendor STATIC ${RENDOR_HEADERS} ${RENDOR_SOURCES})
 target_include_directories(rendor PUBLIC include deps/glfw/include deps/glad/include deps/glm deps/assimp/include)
-target_link_libraries(rendor PUBLIC opengl32 glfw glad)
+target_link_libraries(rendor PUBLIC opengl32 glfw glad assimp)
 
 add_subdirectory(tests)
