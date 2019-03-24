@@ -25,9 +25,9 @@
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "rendor/common/Program.h"
+#include "cg/common/Program.h"
 
-namespace rendor {
+namespace cg {
 
 ShaderProgram::ShaderProgram() {
   this->programHandle = glCreateProgram();

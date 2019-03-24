@@ -22,17 +22,17 @@
  * SOFTWARE.
  */
 
-#include <rendor/Application.h>
+#include <cg/Application.h>
 #include <vector>
 
-class Triangle : public rendor::Application {
+class Triangle : public cg::Application {
  private:
   unsigned int vao;
   unsigned int vbo;
   unsigned int shader;
 
  public:
-  Triangle() : rendor::Application(4, 5, "Triangle", 1280, 720) {}
+  Triangle() : cg::Application(4, 5, "Triangle", 1280, 720) {}
 
  protected:
   void onInit() override {

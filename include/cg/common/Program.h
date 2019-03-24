@@ -28,9 +28,9 @@
 #include <vector>
 #include <glm/glm.hpp>
 
-#include "rendor/common/Shader.h"
+#include "cg/common/Shader.h"
 
-namespace rendor {
+namespace cg {
 
 class ShaderProgram {
 private:

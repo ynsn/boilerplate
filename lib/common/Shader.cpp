@@ -29,11 +29,11 @@
 #include <sstream>
 #include <fstream>
 
-#include "rendor/common/Shader.h"
+#include "cg/common/Shader.h"
 
-namespace rendor {
+namespace cg {
 
-rendor::Shader::Shader(const ShaderType &type) : shaderType(type) {
+Shader::Shader(const ShaderType &type) : shaderType(type) {
   this->shaderHandle = glCreateShader(static_cast<GLenum>(this->shaderType));
   if (this->shaderHandle == 0) {
     fprintf(stderr, "Error: could not create shader, id = 0...\n");

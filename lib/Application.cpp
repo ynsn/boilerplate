@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
-#include "rendor/Application.h"
+#include "cg/Application.h"
 
-namespace rendor {
+namespace cg {
 
 Application::Application(int glMajor, int glMinor, const std::string &title, int width, int height)
     : title(title), width(width), height(height) {

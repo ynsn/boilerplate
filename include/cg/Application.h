@@ -29,7 +29,7 @@
 #include <GLFW/glfw3.h>
 #include <string>
 
-namespace rendor {
+namespace cg {
 
 class Application {
 public:

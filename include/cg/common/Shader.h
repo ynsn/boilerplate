@@ -27,7 +27,7 @@
 
 #include <string>
 
-namespace rendor {
+namespace cg {
 
 enum class ShaderType {
   VertexShader = GL_VERTEX_SHADER,

@@ -22,21 +22,21 @@
  * SOFTWARE.
  */
 
-#include <rendor/Application.h>
-#include <rendor/common/Shader.h>
-#include <rendor/common/Program.h>
+#include <cg/Application.h>
+#include <cg/common/Shader.h>
+#include <cg/common/Program.h>
 #include <iostream>
 
-class Triangle : public rendor::Application {
+class Triangle : public cg::Application {
 private:
   unsigned int vao;
   unsigned int vbo;
-  rendor::Shader *vert;
-  rendor::Shader *frag;
-  rendor::ShaderProgram *shader;
+  cg::Shader *vert;
+  cg::Shader *frag;
+  cg::ShaderProgram *shader;
 
 public:
-  Triangle() : rendor::Application(4, 5, "Triangle", 1280, 960) {}
+  Triangle() : cg::Application(4, 5, "Triangle", 1280, 960) {}
 
 protected:
   void onInit() override {
@@ -78,8 +78,8 @@ protected:
                                  "    col = color;\n"
                                  "}\n";
 
-    this->vert = new rendor::Shader(rendor::ShaderType::VertexShader);
-    this->frag = new rendor::Shader(rendor::ShaderType::FragmentShader);
+    this->vert = new cg::Shader(cg::ShaderType::VertexShader);
+    this->frag = new cg::Shader(cg::ShaderType::FragmentShader);
 
     vert->setShaderSource(vertexShader);
     frag->setShaderSource(fragmentshader);
@@ -96,7 +96,7 @@ protected:
     std::cout << "Vertex shader source: " << vert->getShaderSource() << "\n";
     std::cout << "Fragment shader source: " << frag->getShaderSource() << "\n";
 
-    this->shader = new rendor::ShaderProgram();
+    this->shader = new cg::ShaderProgram();
     this->shader->attachShader(vert);
     this->shader->attachShader(frag);
     this->shader->linkProgram();
