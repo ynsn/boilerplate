@@ -29,10 +29,16 @@
 #include <GLFW/glfw3.h>
 #include <string>
 
+#define IMGUI_IMPL_OPENGL_LOADER_GLAD
+#include <imgui.h>
+#include <misc/cpp/imgui_stdlib.h>
+#include <examples/imgui_impl_glfw.h>
+#include <examples/imgui_impl_opengl3.h>
+
 namespace cg {
 
 class Application {
-public:
+ public:
   enum class KeyInputType {
     Press,
     Repeat,
@@ -46,13 +52,13 @@ public:
     Super = 0x08
   };
 
-private:
+ private:
   GLFWwindow *handle;
   std::string title;
   int width;
   int height;
 
-public:
+ public:
   Application(int glMajor, int glMinor, const std::string &title, int width, int height);
   ~Application();
 
@@ -66,43 +72,61 @@ public:
   int getWidth();
   int getHeight();
 
-protected:
-  virtual void onInit() {}
-  virtual void onUpdate(double delta) {}
+ protected:
+  virtual void onInit() {
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO();
+    (void) io;
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    ImFont *font = io.Fonts->AddFontFromFileTTF("Inter-Regular.ttf", 14.0f);
+
+    ImGui_ImplGlfw_InitForOpenGL(this->handle, true);
+    ImGui_ImplOpenGL3_Init("#version 450");
+    ImGui::StyleColorsLight();
+
+  }
+  virtual void onUpdate(float delta) {}
+  virtual void onGui() {}
   virtual void onViewportResize(int width, int height) {}
   virtual void onKeyInput(int key, int scancode, KeyInputType action, int mods) {}
   virtual void onMouseInput() {}
-  virtual void onMouseMove() {}
+  virtual void onMouseMove(double x, double y) {}
 
-private:
+ private:
   inline static void OnViewportResizeCallback(GLFWwindow *window, int width, int height) {
     auto *application = (Application *) glfwGetWindowUserPointer(window);
     application->onViewportResize(width, height);
   }
 
-  inline static void OnKeyInputCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
-    auto *application = (Application *) glfwGetWindowUserPointer(window);
+  inline static void OnMouseMoveCallback(GLFWwindow *window, double x, double y) {
+    if (!ImGui::IsAnyWindowFocused()) {
+      auto *application = (Application *) glfwGetWindowUserPointer(window);
 
-    KeyInputType inputAction;
-    KeyInputModifier inputModifier;
-
-    // Convert input action types
-    switch (action) {
-    case GLFW_PRESS:
-      inputAction = KeyInputType::Press;
-      break;
-    case GLFW_REPEAT:
-      inputAction = KeyInputType::Repeat;
-      break;
-    case GLFW_RELEASE:
-      inputAction = KeyInputType::Release;
-      break;
-    default:
-      inputAction = KeyInputType::Repeat;
-      break;
+      application->onMouseMove(x, y);
     }
+  }
 
-    application->onKeyInput(key, scancode, inputAction, mods);
+  inline static void OnKeyInputCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+    if (!ImGui::IsAnyWindowFocused()) {
+      auto *application = (Application *) glfwGetWindowUserPointer(window);
+
+      KeyInputType inputAction;
+      KeyInputModifier inputModifier;
+
+      // Convert input action types
+      switch (action) {
+        case GLFW_PRESS:inputAction = KeyInputType::Press;
+          break;
+        case GLFW_REPEAT:inputAction = KeyInputType::Repeat;
+          break;
+        case GLFW_RELEASE:inputAction = KeyInputType::Release;
+          break;
+        default:inputAction = KeyInputType::Repeat;
+          break;
+      }
+
+      application->onKeyInput(key, scancode, inputAction, mods);
+    }
   }
 };
 

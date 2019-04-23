@@ -31,11 +31,13 @@ Application::Application(int glMajor, int glMinor, const std::string &title, int
   glfwInit();
   glfwWindowHint(GLFW_VERSION_MAJOR, glMajor);
   glfwWindowHint(GLFW_VERSION_MINOR, glMinor);
+  glfwWindowHint(GLFW_SAMPLES, 8);
   this->handle = glfwCreateWindow(this->width, this->height, this->title.c_str(), nullptr, nullptr);
 
   glfwSetWindowUserPointer(this->handle, this);
   glfwSetFramebufferSizeCallback(this->handle, OnViewportResizeCallback);
   glfwSetKeyCallback(this->handle, OnKeyInputCallback);
+  glfwSetCursorPosCallback(this->handle, OnMouseMoveCallback);
 
   glfwMakeContextCurrent(this->handle);
   gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
@@ -48,8 +50,31 @@ Application::~Application() {
 
 void Application::run() {
   this->onInit();
+
+  double time = glfwGetTime();
+  double deltaTime;
   while (!glfwWindowShouldClose(this->handle)) {
-    this->onUpdate(0);
+
+    double currentTime = glfwGetTime();
+    deltaTime = currentTime - time;
+    this->onUpdate(deltaTime);
+    time = currentTime;
+
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+    this->onGui();
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+    ImGuiIO &io = ImGui::GetIO();
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+      GLFWwindow* backup_current_context = glfwGetCurrentContext();
+      ImGui::UpdatePlatformWindows();
+      ImGui::RenderPlatformWindowsDefault();
+      glfwMakeContextCurrent(backup_current_context);
+    }
 
     glfwSwapBuffers(this->handle);
     glfwPollEvents();
